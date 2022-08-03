@@ -1,0 +1,28 @@
+* {
+    margin: 0;
+    padding: 0;
+    background-color: beige;
+}
+
+.body {
+    display: flex;
+    width: 100vw;
+}
+
+.body > * {
+    border: 3px brown solid;
+    height: 90vh;
+    padding: 5px;
+}
+
+.interface {
+    width: 40%;
+}
+
+.boardcontainer {
+    width: 60%;
+}
+
+.tile {
+    min-width: 10px;
+}
