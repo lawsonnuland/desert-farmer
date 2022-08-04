@@ -51,6 +51,16 @@
     align-items: center;
 }
 
+.zai {
+    background-color: black;
+    border-radius: 50%;
+    min-width: 5px;
+    min-height: 5px;
+    display: flex;
+    width: 50%;
+    height: 50%;
+}
+
 .footer {
     height: 5vh;
 }
