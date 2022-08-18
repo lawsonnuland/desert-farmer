@@ -61,6 +61,18 @@
     height: 50%;
 }
 
+.sprout {
+    width: 60%;
+    background: none;
+    height: 60%;
+}
+
 .footer {
-    height: 5vh;
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+}
+
+.footer > button {
+    height: 1.5em;
 }
