@@ -3,7 +3,7 @@ let gameData = {
     plotArray: [],
     funds: 0,
     fertileTotal: 0,
-    startingFertility: 0,
+    startingFertility: 1,
     level: 1,
     fertileSpeed: 1
 }
@@ -12,6 +12,8 @@ let gameData = {
 const plot = (id) => {
     let fertile = false;
     let hasZai = false;
+    let polluted = false;
+    let golden = false;
     let color = [(255 - gameData.startingFertility), 255, 0];
     this.id = id;
     return {fertile, hasZai, color, id}
@@ -79,13 +81,15 @@ function increment() {
 
 function buttonManager() {
     const newPlot = document.querySelector('.newplot');
+    const morePlots = document.querySelector('.moreplots');
     const startingUpgrade = document.querySelector('.startupgrade');
     const speed = document.querySelector('.speed');
-    newPlot.textContent = `Buy new plot of land: $${Math.pow(gameData.level*4,2)}`;
-    startingUpgrade.textContent = `Buy fertilizer: $${(gameData.fertileTotal+20)*4}`;
-    speed.textContent = `Seed clouds: $${Math.pow(gameData.fertileSpeed,2)*100}`;
+    newPlot.textContent = `Buy new plot of land: $${(gameData.level*4)**2}`;
+    morePlots.textContent = `Increase maximum plots: $${gameData.level*200}`;
+    startingUpgrade.textContent = `Buy fertilizer: $${(gameData.fertileTotal+20)*gameData.startingFertility*4}`;
+    speed.textContent = `Seed clouds: $${(gameData.fertileSpeed**2)*100}`;
 
-    return {newPlot, startingUpgrade, speed}
+    return {newPlot, morePlots, startingUpgrade, speed}
 }
 
 
@@ -96,29 +100,53 @@ window.addEventListener('load', () => {
     if (savegame !== null) {
         gameData = savegame;
     }
+
     const resetButton = document.querySelector('.reset');
+    const newPlot = document.querySelector('.newplot');
+    const morePlots = document.querySelector('.moreplots');
+    const startingUpgrade = document.querySelector('.startupgrade');
+    const speed = document.querySelector('.speed');
+    const fertileDisplay = document.querySelector('.fertile');
+    newPlot.addEventListener('click', () => {
+        if(gameData.funds >= (gameData.level*4)**2) {
+            generateBoard((gameData.level + 1)**2);
+            gameData.funds -= (gameData.level*4)**2;
+        }
+    })
+
+    morePlots.addEventListener('click', () => {
+        if(gameData.funds >= gameData.level*200) {
+            gameData.funds -= gameData.level*200;
+            gameData.level++;
+            generateBoard((gameData.level + 1)**2);
+        }
+    })
+
+    startingUpgrade.addEventListener('click', ()=> {
+        if(gameData.funds >= (gameData.fertileTotal+20*gameData.startingFertility)*4) {
+            gameData.funds -= (gameData.fertileTotal+20*gameData.startingFertility)*4;
+            gameData.startingFertility *=2;
+        }
+    })
+
+    speed.addEventListener('click', () =>{
+        if(gameData.funds >= (gameData.fertileSpeed**2)*100) {
+            gameData.funds -= (gameData.fertileSpeed**2)*100;
+            gameData.fertileSpeed += 1;
+        }
+    })
+
     resetButton.addEventListener('click', ()=> {
         gameData = {
             plotArray: [],
             funds: 0,
             fertileTotal: 0,
-            startingFertility: 0,
+            startingFertility: 1,
             level: 1,
             fertileSpeed: 1
         }
+        fertileDisplay.textContent= `: ${gameData.fertileTotal} square meters`;
         generateBoard(Math.pow(gameData.level + 1, 2));
-    })
-    
-    const newPlot = document.querySelector('.newplot');
-    const startingUpgrade = document.querySelector('.startupgrade');
-    const speed = document.querySelector('.speed');
-    const fertileDisplay = document.querySelector('.fertile');
-    newPlot.addEventListener('click', () => {
-        if(gameData.funds >= Math.pow(gameData.level*4,2)) {
-            gameData.level++;
-            generateBoard(Math.pow(gameData.level + 1, 2));
-            gameData.funds -= Math.pow(gameData.level + 1, 2);
-        }
     })
 
     buttonManager();
